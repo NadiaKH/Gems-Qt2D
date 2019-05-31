@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>img/PixelRuby.png</file>
+        <file>img/GoldApple.png</file>
+        <file>img/Diamond.png</file>
+        <file>img/Lapis.png</file>
+    </qresource>
+</RCC>
