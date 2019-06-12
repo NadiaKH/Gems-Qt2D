@@ -8,6 +8,8 @@
 
 class GameArea;
 class GemsGrid;
+class Fall;
+class Disappear;
 
 class Gem : public QObject {
 

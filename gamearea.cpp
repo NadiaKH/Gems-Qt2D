@@ -1,4 +1,5 @@
 #include "gamearea.hpp"
+#include "animation.hpp"
 
 
 GameArea::GameArea() : _clickable(true), _gameStarted(false) {
@@ -21,7 +22,8 @@ void GameArea::mousePressEvent(QMouseEvent * event){
         return;
     }
 
-    if (!_clickable) return;
+    if (Animation::getCounter() > 0) return;
+
     //TODO
     QPointF p = event->localPos();
     qreal offsetX = (ViewWidth - SceneWidth) / 2;

@@ -6,6 +6,7 @@
 #include <QGraphicsRectItem>
 #include <QObject>
 #include "gemsgrid.hpp"
+class GemsGrid;
 
 class GameArea : public QGraphicsView {
 public:

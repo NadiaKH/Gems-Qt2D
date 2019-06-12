@@ -91,4 +91,6 @@ UsualGem::UsualGem(int indX, int indY, GemsGrid * parent)
 
     _qpix = new QGraphicsPixmapItem(QPixmap(path[_type])
                                     .scaled(iconSize, iconSize));
+    setCell(indX, indY);
 }
+

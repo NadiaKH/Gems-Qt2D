@@ -1,7 +1,10 @@
 #include <stdlib.h>
 #include <time.h>
 #include <set>
+#include "gem.hpp"
 #include "gemsgrid.hpp"
+#include "animation.hpp"
+#include "clickanimation.hpp"
 
 template <typename T>
 using Matrix = GemsGrid::Matrix<T>;
@@ -14,7 +17,6 @@ using Vector = GemsGrid::Vector<T>;
 GemsGrid::GemsGrid(unsigned int height, unsigned int width)
     : _w(width)
     , _h(height)
-    , _clickAnimation(nullptr)
 {
     _grid = Matrix<Gem *>(height, Vector<Gem *>(width));
 
@@ -28,6 +30,8 @@ GemsGrid::GemsGrid(unsigned int height, unsigned int width)
 
 
 void GemsGrid::init(QGraphicsScene * scene) {
+
+    _scene = scene;
 
     for (unsigned int i = 0; i < _h; i++) {
         for (unsigned int j = 0; j < _w; j++) {
@@ -53,20 +57,106 @@ void GemsGrid::init(QGraphicsScene * scene) {
 }
 
 
+
 Gem * GemsGrid::at(int i, int j) {
     using ui = unsigned int;
-
-    if (i < 0 || j < 0) return nullptr;
-    if (i >= int(_h) || j >=  int(_w)) return nullptr;
+    if (i < 0 || j < 0 || i >= int(_h) || j >= int(_w))
+        return nullptr;
     return _grid[ui(i)][ui(j)];
 }
 
+/*
+void GemsGrid::clickGem(unsigned int i, unsigned int j) {
+    assert(i < _h);
+    assert(j < _w);
 
-Matrix<Gem *> GemsGrid::GridTraverse(unsigned int row, unsigned int col) {
+
+    DisappearOrder ord(this, i, j);
+    std::vector<std::vector<Gem *>> newGems(ord.width());
+
+    //generate new gems with init positions
+    for (unsigned int i = 0; i < ord.width(); i++) {
+        for (unsigned int j = 0; j < ord.height(); j++) {
+            if (ord.is(j, i)) {
+                int row = 0;
+                if (newGems[i].empty())
+                    row = -1;
+                else
+                    row = newGems[i].back()->row() - 1;
+                newGems[i].push_back(new Gem(row, int(i)));
+            }
+        }
+    }
+
+
+    //TODO how to delete old gems?
+
+    //_clickAnimation =  new ChunkDisappear(tr.layers());
+
+
+}
+*/
+
+
+void GemsGrid::click(qreal x, qreal y) {
+    if (x < 0 || y < 0) return;
+    unsigned int j = static_cast<unsigned int>(x / cellSize);
+    unsigned int i = static_cast<unsigned int>(y / cellSize);
+    if (i >= _h || j >= _w) return;
+    ClickAnimation * ca = new ClickAnimation(this, i, j);
+}
+
+
+Matrix<Gem *> GemsGrid::getGemChunk(unsigned int i, unsigned int j) {
+    DisappearOrder d(this, i, j);
+    for (unsigned int row = 0; row < _h; row++) {
+        for (unsigned int col = 0; col < _w; col++)
+            if (d.is(row, col))
+                _grid[row][col] = nullptr;
+    }
+
+    generateNewGems();
+
+    return d.layers();
+}
+
+
+void GemsGrid::generateNewGems() {
+    using ui = unsigned int;
+    for (int j = 0; j < int(_w); j++) {
+        int shift = 0;
+        for (int i = int(_h - 1); i >= 0; i--) {
+            if (_grid[ui(i)][ui(j)] == nullptr)
+                shift++;
+            else {
+                _grid[ui(i + shift)][ui(j)] = _grid[ui(i)][ui(j)];
+            }
+        }
+
+        //generate new gems
+        int pos = 0;
+        while(shift > 0) {
+            shift--;
+            pos--;
+            // shift instead pos
+            _grid[ui(shift)][ui(j)] = new UsualGem(j, pos, this);
+            //_grid[ui(shift)][ui(j)] = new UsualGem(j, shift, this);
+
+            //add gem to scene
+            _scene->addItem(_grid[ui(shift)][ui(j)]->qpix());
+        }
+    }
+
+}
+
+
+/*
+Matrix<Gem *> GemsGrid::GridTraverse(unsigned int row, unsigned int col,
+                                     Matrix<bool> & used) {
 
     using ui = unsigned int;
 
-    Matrix<bool> used(_h, Vector<bool>(_w, false));
+    used = Matrix<bool>(_h, Vector<bool>(_w, false));
     used[row][col] = true;
     Gem * startGem = _grid[row][col];
     Matrix<Gem *> layers = { { startGem } };
@@ -102,14 +192,15 @@ Matrix<Gem *> GemsGrid::GridTraverse(unsigned int row, unsigned int col) {
     }
 
     //TODO:
-     /* TEST:
+      TEST:
     for (ui i = 0; i < used.size(); i++) {
         for (ui j = 0; j < used[0].size(); j++) {
             if (used[i][j])
                 _grid[i][j]->startDisappear();
         }
     }
-    //*/
+    //
 
     return layers;
 }
+*/

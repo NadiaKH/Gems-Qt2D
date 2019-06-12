@@ -25,8 +25,6 @@ public:
     template<typename T>
     using Vector = std::vector<T>;
 
-
-
     GemsGrid(unsigned int height, unsigned int width);
     ~GemsGrid();
     void init(QGraphicsScene * scene);
@@ -35,30 +33,23 @@ public:
         return _grid[i][j];
     }
 
-    void click(qreal x, qreal y) {
-        if (x < 0 || y < 0) return;
-        unsigned int j = static_cast<unsigned int>(x / cellSize);
-        unsigned int i = static_cast<unsigned int>(y / cellSize);
-        if (i >= _h || j >= _w) return;
-        clickGem(i, j);
-    }
-
-    void clickGem(unsigned int i, unsigned int j) {
-        assert(i < _h);
-        assert(j < _w);
-
-        Matrix<Gem *> layers = GridTraverse(i, j);
-        _clickAnimation =  new ChunkDisappear(layers);
-
-    }
-
+    void click(qreal x, qreal y);
     Gem * at(int i, int j);
 
-private:
-    Matrix<Gem *> GridTraverse(unsigned int y0, unsigned int x0);
+    unsigned int width()  { return _w; }
+    unsigned int height() { return _h; }
 
-    ChunkDisappear * _clickAnimation;
-    unsigned int _h;
+    //layers order
+    Matrix<Gem *> getGemChunk(unsigned int i, unsigned int j);
+
+    //new matrix with old positions
+    void generateNewGems();
+
+private:
     unsigned int _w;
+    unsigned int _h;
+    QGraphicsScene * _scene;
+    //ClickAnimation * _clickAnimation;
     Matrix<Gem *> _grid;
+
 };

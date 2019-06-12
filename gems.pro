@@ -1,6 +1,6 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2019-05-31T11:59:17
+# Project created by QtCreator 2019-06-11T16:40:52
 #
 #-------------------------------------------------
 
@@ -24,8 +24,16 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 CONFIG += c++11
 
+# Default rules for deployment.
+qnx: target.path = /tmp/$${TARGET}/bin
+else: unix:!android: target.path = /opt/$${TARGET}/bin
+!isEmpty(target.path): INSTALLS += target
+ 
+
 SOURCES += \
     animation.cpp \
+    clickanimation.cpp \
+    dissapearorder.cpp \
     gamearea.cpp \
     gem.cpp \
     gemsgrid.cpp \
@@ -33,16 +41,11 @@ SOURCES += \
 
 HEADERS += \
     animation.hpp \
+    clickanimation.hpp \
+    dissapearorder.hpp \
     gamearea.hpp \
     gem.hpp \
     gemsgrid.hpp
-
-FORMS +=
-
-# Default rules for deployment.
-qnx: target.path = /tmp/$${TARGET}/bin
-else: unix:!android: target.path = /opt/$${TARGET}/bin
-!isEmpty(target.path): INSTALLS += target
 
 RESOURCES += \
     gems.qrc
