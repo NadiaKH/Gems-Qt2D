@@ -1,0 +1,49 @@
+#include "bonuses.h"
+#include "bonusanimations.h"
+#include <stdlib.h>
+
+
+Vector<Gem *> Lightning::createSequence() {
+    
+    std::vector<Gem * > sequence;
+    
+    int w = int(_grid->width());
+    int h = int(_grid->height());
+
+    int a = rand() % 2;
+    int b = rand() % 2;
+
+    //step X, step Y
+    int step[] = {1 - a * 2, 1 - b * 2};
+
+    // coord X Y
+    int coord[] = {a * (w - 1), b * (h - 1)};
+    Gem * cur = _grid->at(coord[1], coord[0]);
+
+
+    int dir = rand() % 2;
+
+    while(cur) {
+        sequence.push_back(cur);
+
+
+        int next1[] = {coord[1], coord[0]};
+        int next2[] = {coord[1], coord[0]};
+        next1[dir]  += step[dir];
+        next2[!dir] += step[!dir];
+
+
+        Gem * nextGem1 = _grid->at(next1[1], next1[0]);
+        Gem * nextGem2 = _grid->at(next2[1], next2[0]);
+
+        if (nextGem1 && nextGem1->type() == cur->type()) {
+            cur = nextGem1;
+        }
+        else {
+            dir = !dir;
+            cur = nextGem2;
+        }
+    }
+    
+    return sequence;
+}

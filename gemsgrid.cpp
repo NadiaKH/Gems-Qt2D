@@ -43,16 +43,16 @@ void GemsGrid::init(QGraphicsScene * scene) {
     unsigned long i, j;
     for (i = 0 ; i < _h / 2; i++) {
         for (j = 0; j < _w; j++) {
-            _grid[i * 2][j]->startFall(int(i * 2), -qreal(j)/2);
+            _grid[i * 2][j]->startFall(int(i * 2), -qreal(j)/4);
         }
         for (j = 0; j < _w; j++) {
-            _grid[i * 2 + 1][j]->startFall(int(i * 2 + 1), -qreal(_w - j - 1)/2);
+            _grid[i * 2 + 1][j]->startFall(int(i * 2 + 1), -qreal(_w - j - 1)/4);
         }
     }
 
     if (i * 2 < _h)
         for (j = 0; j < _w; j++) {
-            _grid[i * 2][j]->startFall(int(i * 2), -qreal(j)/2);
+            _grid[i * 2][j]->startFall(int(i * 2), -qreal(j)/4);
         }
 }
 
@@ -115,9 +115,21 @@ Matrix<Gem *> GemsGrid::getGemChunk(unsigned int i, unsigned int j) {
                 _grid[row][col] = nullptr;
     }
 
-    generateNewGems();
+    //generateNewGems();
 
     return d.layers();
+}
+
+
+
+void GemsGrid::deleteGems(Indx & indx) {
+    for (auto p : indx) {
+        if (at(int(p.first), int(p.second))) {
+            _grid[p.first][p.second] = nullptr;
+        }
+    }
+
+    //generateNewGems();
 }
 
 

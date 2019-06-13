@@ -14,6 +14,8 @@ class Gem;
 class GemsGrid
 {
 
+
+
 public:
 
     static const int cellSize = 100;
@@ -24,6 +26,8 @@ public:
 
     template<typename T>
     using Vector = std::vector<T>;
+
+    using Indx = std::vector<std::pair<unsigned int , unsigned int>>;
 
     GemsGrid(unsigned int height, unsigned int width);
     ~GemsGrid();
@@ -44,6 +48,8 @@ public:
 
     //new matrix with old positions
     void generateNewGems();
+
+    void deleteGems(Indx & indx);
 
 private:
     unsigned int _w;

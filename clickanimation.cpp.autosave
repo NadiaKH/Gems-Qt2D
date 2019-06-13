@@ -24,8 +24,6 @@ ClickAnimation::ClickAnimation(GemsGrid * grid, unsigned int i, unsigned int j)
     _disappearTime =  Disappear::animationTime() + ch->animationTime();
     //TODO
     Lightning * bonus = new Lightning(grid);
-    bonus->startAnimation();
-
     _grid->generateNewGems();
 
     _left = grid->width();

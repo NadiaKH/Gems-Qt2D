@@ -32,6 +32,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 SOURCES += \
     animation.cpp \
+    bonusanimations.cpp \
+    bonuses.cpp \
     clickanimation.cpp \
     dissapearorder.cpp \
     gamearea.cpp \
@@ -41,6 +43,8 @@ SOURCES += \
 
 HEADERS += \
     animation.hpp \
+    bonusanimations.h \
+    bonuses.h \
     clickanimation.hpp \
     dissapearorder.hpp \
     gamearea.hpp \

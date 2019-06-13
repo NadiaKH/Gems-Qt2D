@@ -13,6 +13,7 @@ private:
     GemsGrid * _grid;
     unsigned int _row;
     unsigned int _col;
+    int _curTime;
     int _disappearTime;
     unsigned int _left;
     unsigned int _right;

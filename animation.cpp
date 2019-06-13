@@ -5,7 +5,6 @@
 
 int Animation::Counter = 0;
 
-
 void Fall::timerEvent(QTimerEvent *) {
     if (_dest > _pos) {
         _v += G * Interval;
@@ -83,11 +82,12 @@ ColumnFall::ColumnFall(GemsGrid * grid, unsigned int col)
 
 
 void ColumnFall::timerEvent(QTimerEvent *) {
-    using ui = unsigned int;
+
     _row = _row - 1;
     Gem * gem = _grid->at(_row, int(_col));
-    assert(gem != nullptr);
-    gem->startFall(_row);
+    //assert(gem != nullptr);
+    if (gem)
+        gem->startFall(_row);
 
     if (_row == 0)
         delete this;

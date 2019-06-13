@@ -16,7 +16,7 @@ class Animation : public QObject {
     Q_OBJECT
 
 public:
-    Animation(int ms) : _ms(ms) {
+    Animation(int ms, Animation * parent = nullptr) : _ms(ms), _parent(parent) {
         startTimer(ms);
         Counter++;
     }
@@ -34,6 +34,7 @@ public:
 private:
     static int Counter;
     int _ms;
+    Animation * _parent;
 
 signals:
     void updated();
@@ -47,7 +48,8 @@ class Fall : public Animation {
 public:
     Fall(qreal start, qreal dest, qreal velocity)
         : Animation(Interval), _pos(start), _dest(dest), _v(velocity)
-    { /*assert((dest - start) * G >= 0);*/ }
+    {}
+
 
     qreal pos() { return _pos; }
 
@@ -55,7 +57,7 @@ public:
     static int animationTime(qreal deltaPos, qreal v = 0);
 
 private:
-    constexpr static qreal G = 0.01;
+    constexpr static qreal G = 0.015;
     constexpr static int Interval = 10;
     qreal _pos;
     qreal _dest;
@@ -115,6 +117,7 @@ public:
 
 private:
     constexpr static int Interval = 100;
+
     GemsGrid * _grid;
     unsigned int _col;
     int _row;
